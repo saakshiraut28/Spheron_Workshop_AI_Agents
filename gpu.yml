@@ -1,0 +1,42 @@
+version: "1.0"
+
+services:
+  web:
+    image: jupyter/minimal-notebook:latest
+    expose:
+      - port: 8888       
+        as: 8888         
+        to:              
+          - global: true
+    env:
+      - TEST=test        
+
+profiles:
+  name: hello-world
+  duration: 10min        
+  mode: provider 
+  tier:
+    - community
+  compute:
+    web:
+      resources:
+        cpu:
+          units: 0.5
+        memory:
+          size: 1Gi    
+        storage:
+          size: 1Gi
+  placement:
+    westcoast:
+      attributes:
+        region: us-east 
+      pricing:
+        web:
+          token: USDT
+          amount: 50
+
+deployment:
+  web:
+    westcoast:
+      profile: web
+      count: 1
